@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, FileText, AlertCircle, ArrowRight, Shield, Clock, Users, BookOpen, HelpCircle, MessageCircle } from "lucide-react";
+import { Upload, FileText, AlertCircle, ArrowRight, Shield, Clock, Users, BookOpen, HelpCircle, MessageCircle, Github } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 export default function Home() {
@@ -286,6 +286,63 @@ export default function Home() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">{item.q}</h3>
                     <p className="text-sm text-gray-500 leading-relaxed">{item.a}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="px-4 pb-24 scroll-mt-20">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">Contact Us</h2>
+            <p className="text-gray-500 text-center mb-10">Get in touch with the team behind DocExplain</p>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {[
+                {
+                  name: "Aaron Parwany",
+                  handle: "@aarondoesnotcode",
+                  linkedin: "https://www.linkedin.com/in/aaron-parwany/",
+                  github: "https://github.com/aarondoesnotcode",
+                  img: "/aaron pfp.jpeg",
+                },
+                {
+                  name: "Ajay Solanki",
+                  handle: "@ajaysoll",
+                  linkedin: "https://www.linkedin.com/in/ajay-solanki05/",
+                  github: "https://github.com/ajaysoll",
+                  img: "/ajay pfp.jpeg",
+                },
+              ].map((person, i) => (
+                <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col items-center text-center">
+                  <img
+                    src={person.img}
+                    alt={person.name}
+                    className="w-20 h-20 rounded-full object-cover mb-4"
+                  />
+                  <h3 className="text-lg font-semibold text-gray-900">{person.name}</h3>
+                  <p className="text-sm text-gray-400 mb-4">{person.handle}</p>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={person.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-[#0A66C2] bg-gray-50 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors"
+                    >
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                      LinkedIn
+                    </a>
+                    <a
+                      href={person.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+                    >
+                      <Github className="h-4 w-4" />
+                      GitHub
+                    </a>
                   </div>
                 </div>
               ))}

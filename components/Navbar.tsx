@@ -40,6 +40,12 @@ export default function Navbar({ showNavLinks = true }: NavbarProps) {
             >
               Help
             </button>
+            <button
+              onClick={() => handleClick("contact")}
+              className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+            >
+              Contact
+            </button>
           </div>
         )}
       </div>

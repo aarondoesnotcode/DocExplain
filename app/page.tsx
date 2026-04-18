@@ -1,28 +1,53 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, FileText, AlertCircle } from "lucide-react";
+import { Upload, FileText, AlertCircle, ArrowRight, Shield, Clock, Users, BookOpen, HelpCircle, MessageCircle } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      if (selectedFile.size > 10 * 1024 * 1024) { // 10MB limit
-        setError("File size must be less than 10MB");
-        setFile(null);
-        return;
-      }
-      if (!["image/jpeg", "image/png", "application/pdf"].includes(selectedFile.type)) {
-        setError("Please upload an image (JPG, PNG) or PDF file");
-        setFile(null);
-        return;
-      }
-      setError("");
-      setFile(selectedFile);
+      validateAndSetFile(selectedFile);
+    }
+  };
+
+  const validateAndSetFile = (selectedFile: File) => {
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setError("File size must be less than 10MB");
+      setFile(null);
+      return;
+    }
+    if (!["image/jpeg", "image/png", "application/pdf"].includes(selectedFile.type)) {
+      setError("Please upload an image (JPG, PNG) or PDF file");
+      setFile(null);
+      return;
+    }
+    setError("");
+    setFile(selectedFile);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      validateAndSetFile(droppedFile);
     }
   };
 
@@ -46,8 +71,6 @@ export default function Home() {
       }
 
       const data = await response.json();
-
-      // Store results in sessionStorage and redirect
       sessionStorage.setItem("docResults", JSON.stringify(data));
       window.location.href = "/results";
     } catch (err) {
@@ -59,86 +82,225 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
-      <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            DocExplain
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Understand your UK official documents
-          </p>
-        </div>
-
-        {/* Upload Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="text-center mb-6">
-            <FileText className="mx-auto h-16 w-16 text-indigo-600 mb-4" />
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-              Upload Your Document
-            </h2>
-            <p className="text-gray-600 text-sm">
-              We accept TfL fines, council letters, and eviction notices
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 pt-16">
+        {/* Hero Section */}
+        <section className="px-4 pt-16 pb-10 sm:pt-24 sm:pb-16">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+              <Shield className="h-4 w-4" />
+              Free &amp; private — no login required
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+              Understand your official
+              <br />
+              <span className="text-indigo-600">UK documents</span>
+            </h1>
+            <p className="text-lg text-gray-500 max-w-xl mx-auto">
+              Upload a TfL fine, council letter, or eviction notice and instantly
+              get a plain English explanation, key deadlines, and a ready-to-use
+              response letter.
             </p>
           </div>
+        </section>
 
-          {/* File Upload Area */}
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-500 transition-colors cursor-pointer mb-4">
-            <input
-              type="file"
-              id="file-upload"
-              className="hidden"
-              accept="image/jpeg,image/png,application/pdf"
-              onChange={handleFileChange}
-              disabled={isUploading}
-            />
-            <label htmlFor="file-upload" className="cursor-pointer">
-              <Upload className="mx-auto h-12 w-12 text-gray-400 mb-3" />
-              <p className="text-gray-600 mb-1">
-                {file ? file.name : "Click to upload or drag and drop"}
-              </p>
-              <p className="text-gray-400 text-sm">
-                JPG, PNG, or PDF (max 10MB)
-              </p>
-            </label>
-          </div>
+        {/* Upload Section */}
+        <section className="px-4 pb-16">
+          <div className="max-w-lg mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+              {/* Upload Area */}
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`relative border-2 border-dashed rounded-xl p-10 text-center transition-all cursor-pointer mb-5 ${
+                  isDragOver
+                    ? "border-indigo-500 bg-indigo-50/50"
+                    : "border-gray-200 hover:border-indigo-400 hover:bg-gray-50/50"
+                }`}
+              >
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="hidden"
+                  accept="image/jpeg,image/png,application/pdf"
+                  onChange={handleFileChange}
+                  disabled={isUploading}
+                />
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  <div className={`mx-auto mb-4 w-14 h-14 rounded-full flex items-center justify-center transition-colors ${isDragOver ? "bg-indigo-100" : "bg-gray-100"}`}>
+                    <Upload className={`h-7 w-7 ${isDragOver ? "text-indigo-600" : "text-gray-400"}`} />
+                  </div>
+                  <p className="text-gray-700 font-medium mb-1">
+                    {file ? file.name : "Drop your document here or click to browse"}
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    JPG, PNG, or PDF up to 10 MB
+                  </p>
+                </label>
+              </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-start">
-              <AlertCircle className="h-5 w-5 text-red-600 mr-2 flex-shrink-0 mt-0.5" />
-              <p className="text-red-700 text-sm">{error}</p>
+              {/* Error */}
+              {error && (
+                <div className="bg-red-50 border border-red-100 rounded-lg p-3 mb-4 flex items-start">
+                  <AlertCircle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <p className="text-red-700 text-sm">{error}</p>
+                </div>
+              )}
+
+              {/* Submit */}
+              <button
+                onClick={handleUpload}
+                disabled={!file || isUploading}
+                className="w-full bg-indigo-600 text-white py-3.5 px-4 rounded-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              >
+                {isUploading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Analysing your document…
+                  </>
+                ) : (
+                  <>
+                    Analyse Document
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+
+              {/* Disclaimer */}
+              <p className="text-xs text-gray-400 text-center mt-4">
+                This is not legal advice. For further help, contact{" "}
+                <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">
+                  Citizens Advice
+                </a>
+                .
+              </p>
             </div>
-          )}
+          </div>
+        </section>
 
-          {/* Upload Button */}
-          <button
-            onClick={handleUpload}
-            disabled={!file || isUploading}
-            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-          >
-            {isUploading ? "Processing..." : "Analyze Document"}
-          </button>
+        {/* How It Works */}
+        <section className="px-4 pb-20">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">How it works</h2>
+            <div className="grid sm:grid-cols-3 gap-8">
+              {[
+                { icon: Upload, title: "Upload", desc: "Take a photo or upload a PDF of your official document." },
+                { icon: FileText, title: "Analyse", desc: "AI reads and explains the document in plain English." },
+                { icon: ArrowRight, title: "Act", desc: "Get key deadlines, actions, and a ready-made response letter." },
+              ].map((step, i) => (
+                <div key={i} className="text-center">
+                  <div className="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
+                    <step.icon className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-1">{step.title}</h3>
+                  <p className="text-sm text-gray-500">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-          {/* Disclaimer */}
-          <p className="text-xs text-gray-500 text-center mt-4">
-            This is not legal advice. For further help, contact Citizens Advice.
-          </p>
-        </div>
+        {/* Supported Docs */}
+        <section className="px-4 pb-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Supported document types</h2>
+              <div className="grid sm:grid-cols-3 gap-6">
+                {[
+                  { emoji: "🚇", title: "TfL Fines", desc: "Penalty charge notices and fare evasion letters" },
+                  { emoji: "🏠", title: "Council Letters", desc: "Housing, tax, and benefits correspondence" },
+                  { emoji: "📋", title: "Eviction Notices", desc: "Section 21, Section 8, and court orders" },
+                ].map((doc, i) => (
+                  <div key={i} className="text-center p-4 rounded-xl bg-gray-50">
+                    <div className="text-3xl mb-3">{doc.emoji}</div>
+                    <h3 className="font-semibold text-gray-900 mb-1">{doc.title}</h3>
+                    <p className="text-sm text-gray-500">{doc.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
-        {/* Supported Document Types */}
-        <div className="mt-6 bg-white/70 rounded-xl p-4">
-          <h3 className="font-semibold text-gray-900 mb-2 text-sm">
-            Supported Document Types:
-          </h3>
-          <ul className="text-sm text-gray-600 space-y-1">
-            <li>• TfL fines and penalty notices</li>
-            <li>• Council letters and notices</li>
-            <li>• Eviction notices</li>
-          </ul>
-        </div>
-      </div>
-    </main>
+        {/* About Us */}
+        <section id="about" className="px-4 pb-20 scroll-mt-20">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">About Us</h2>
+            <p className="text-gray-500 text-center max-w-2xl mx-auto mb-10">
+              DocExplain was built to make official documents accessible to everyone. We believe no one should lose out because a letter was too hard to understand.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-8">
+              {[
+                { icon: Users, title: "Built for people", desc: "Designed for migrants, elderly users, and anyone who struggles with complex language." },
+                { icon: Shield, title: "Private by design", desc: "Your documents are processed in real-time and never stored on our servers." },
+                { icon: Clock, title: "Instant results", desc: "Get a full breakdown in seconds — no waiting, no appointments." },
+              ].map((item, i) => (
+                <div key={i} className="text-center">
+                  <div className="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
+                    <item.icon className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
+                  <p className="text-sm text-gray-500">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Help */}
+        <section id="help" className="px-4 pb-24 scroll-mt-20">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">Help</h2>
+            <div className="space-y-4">
+              {[
+                {
+                  icon: Upload,
+                  q: "What file types can I upload?",
+                  a: "You can upload JPG or PNG images (e.g. a photo of a letter) or a PDF file. The maximum file size is 10 MB.",
+                },
+                {
+                  icon: Shield,
+                  q: "Is my document stored anywhere?",
+                  a: "No. Your document is processed in real-time and is never saved to our servers. It exists only for the duration of the analysis.",
+                },
+                {
+                  icon: BookOpen,
+                  q: "What documents are supported?",
+                  a: "Currently we support TfL fines, council letters, and eviction notices. More document types will be added soon.",
+                },
+                {
+                  icon: MessageCircle,
+                  q: "Is this legal advice?",
+                  a: "No. DocExplain provides plain-English summaries and suggested actions, but this is not a substitute for professional legal advice. For expert help, contact Citizens Advice.",
+                },
+              ].map((item, i) => (
+                <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 flex gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
+                    <item.icon className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">{item.q}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{item.a}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t border-gray-100 bg-white py-8 px-4">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+            <span>@aarondoesnotcode @ajaysoll</span>
+            <span>This is not legal advice. For further help, contact <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">Citizens Advice</a>.</span>
+          </div>
+        </footer>
+      </main>
+    </>
   );
 }

@@ -6,8 +6,8 @@ DocExplain helps users in the UK understand complex official documents (TfL fine
 
 ## Features
 - **Document Upload**: Upload images (JPG, PNG) or PDF files
-- **OCR Processing**: Extract text using Google Vision API or Tesseract
-- **AI Analysis**: Get structured analysis using Google Gemini AI
+- **OCR Processing**: Extract text using Google Vision API when configured, with Tesseract fallback
+- **AI Analysis**: Grounded structured analysis using the Z.ai API
 - **Actionable Results**: Clear summaries, key points, deadlines, and recommended actions
 - **Response Letter**: Generate professional response letters that can be edited
 - **Mobile-Friendly**: Optimized for mobile users
@@ -16,15 +16,15 @@ DocExplain helps users in the UK understand complex official documents (TfL fine
 ## Tech Stack
 - **Frontend**: Next.js 14 (App Router) + Tailwind CSS
 - **Backend**: Next.js API routes (Node.js)
-- **OCR**: Google Vision API (primary) or Tesseract (fallback)
-- **AI**: Google Gemini API
+- **OCR**: Google Vision API (optional primary) or Tesseract (fallback)
+- **AI**: Z.ai chat completions API (`glm-5-turbo` for text, `glm-5v-turbo` for images)
 
 ## Setup Instructions
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Google Cloud API key with Vision API enabled
-- Google AI API key with Gemini API enabled
+- Z.ai API key
+- Optional: Google Cloud API key with Vision API enabled for stronger OCR
 
 ### Installation
 
@@ -46,23 +46,24 @@ cp .env.local.example .env.local
 
 Edit `.env.local` and add your API keys:
 ```
+ZAI_API_KEY=your_zai_api_key_here
+ZAI_MODEL=glm-5-turbo
+ZAI_VISION_MODEL=glm-5v-turbo
 GOOGLE_CLOUD_API_KEY=your_google_cloud_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ### Getting API Keys
 
-**Google Vision API:**
+**Z.ai API:**
+1. Create or copy your Z.ai API key
+2. Add it to `.env.local` as `ZAI_API_KEY`
+
+**Google Vision API (optional but recommended for image OCR):**
 1. Go to Google Cloud Console
-2. Create a project or select existing one
+2. Create a project or select an existing one
 3. Enable Vision API
 4. Create API credentials
 5. Add the API key to your `.env.local`
-
-**Gemini API:**
-1. Go to [Google AI Studio](https://aistudio.google.com/)
-2. Create a free API key
-3. Add the API key to your `.env.local`
 
 ### Running the Application
 
@@ -82,7 +83,7 @@ npm start
 ## Usage
 
 1. **Upload a Document**: Click the upload area or drag and drop a file (JPG, PNG, PDF)
-2. **Wait for Processing**: The app will extract text and analyze the document
+2. **Wait for Processing**: The app will OCR the document, extract key facts, and analyze it
 3. **View Results**: See the summary, key points, urgency level, and deadlines
 4. **Take Action**: Review recommended actions and use the generated response letter
 5. **Edit Response**: Customize the response letter as needed
@@ -109,6 +110,7 @@ docexplain/
 │   └── results/
 │       └── page.tsx              # Results display page
 ├── lib/
+│   ├── document-analysis.ts      # OCR + extraction + analysis pipeline
 │   └── utils.ts                  # Utility functions
 ├── types/
 │   └── document.ts               # TypeScript type definitions
@@ -148,9 +150,9 @@ The application returns structured JSON with the following format:
 
 **"Failed to extract text"**: Ensure the document is clear and readable. High-quality images work best.
 
-**"Failed to analyze document"**: Check your API keys are correctly configured in `.env.local`.
+**"Failed to analyze document"**: Check your `ZAI_API_KEY` is correctly configured in `.env.local`.
 
-**Slow processing**: Large files or complex documents may take longer. Tesseract (fallback) is slower than Google Vision API.
+**Slow processing**: Large files or complex documents may take longer. Tesseract fallback is slower than Google Vision OCR.
 
 ## Development
 

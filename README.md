@@ -5,7 +5,7 @@ Global Hacktour Project @ UCL | @aarondoesnotcode @ajaysoll
 DocExplain helps people in the UK understand official documents by providing plain English explanations, key points, deadlines, and actionable responses. Works with any UK official document — TfL fines, council letters, eviction notices, NHS letters, HMRC notices, and more.
 
 ## Our hackathon entry
-https://www.youtube.com/watch?v=uh4UofHxJio
+https://www.youtube.com/watch?v=uh4UofHxJio - Demo Video
 
 ## Features
 - **Document Upload**: Upload images (JPG, PNG) or PDF files

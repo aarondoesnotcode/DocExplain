@@ -9,6 +9,7 @@ export default function Home() {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
+  const [sampleOutputError, setSampleOutputError] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -84,20 +85,20 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 pt-16">
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950 pt-16 transition-colors">
         {/* Hero Section */}
         <section className="px-4 pt-16 pb-10 sm:pt-24 sm:pb-16">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
               <Shield className="h-4 w-4" />
               Free &amp; private — no login required
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
               Understand your official
               <br />
-              <span className="text-indigo-600">UK documents</span>
+              <span className="text-indigo-600 dark:text-indigo-400">UK documents</span>
             </h1>
-            <p className="text-lg text-gray-500 max-w-xl mx-auto">
+            <p className="text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
               Upload a TfL fine, council letter, or eviction notice and instantly
               get a plain English explanation, key deadlines, and a ready-to-use
               response letter.
@@ -108,7 +109,7 @@ export default function Home() {
         {/* Upload Section */}
         <section className="px-4 pb-16">
           <div className="max-w-lg mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8 transition-colors">
               {/* Upload Area */}
               <div
                 onDragOver={handleDragOver}
@@ -116,8 +117,8 @@ export default function Home() {
                 onDrop={handleDrop}
                 className={`relative border-2 border-dashed rounded-xl p-10 text-center transition-all cursor-pointer mb-5 ${
                   isDragOver
-                    ? "border-indigo-500 bg-indigo-50/50"
-                    : "border-gray-200 hover:border-indigo-400 hover:bg-gray-50/50"
+                    ? "border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/50"
+                    : "border-gray-200 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-gray-50/50 dark:hover:bg-gray-700/50"
                 }`}
               >
                 <input
@@ -129,13 +130,13 @@ export default function Home() {
                   disabled={isUploading}
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
-                  <div className={`mx-auto mb-4 w-14 h-14 rounded-full flex items-center justify-center transition-colors ${isDragOver ? "bg-indigo-100" : "bg-gray-100"}`}>
-                    <Upload className={`h-7 w-7 ${isDragOver ? "text-indigo-600" : "text-gray-400"}`} />
+                  <div className={`mx-auto mb-4 w-14 h-14 rounded-full flex items-center justify-center transition-colors ${isDragOver ? "bg-indigo-100 dark:bg-indigo-900" : "bg-gray-100 dark:bg-gray-700"}`}>
+                    <Upload className={`h-7 w-7 ${isDragOver ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400 dark:text-gray-500"}`} />
                   </div>
-                  <p className="text-gray-700 font-medium mb-1">
+                  <p className="text-gray-700 dark:text-gray-200 font-medium mb-1">
                     {file ? file.name : "Drop your document here or click to browse"}
                   </p>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 dark:text-gray-500 text-sm">
                     JPG, PNG, or PDF up to 10 MB
                   </p>
                 </label>
@@ -143,9 +144,9 @@ export default function Home() {
 
               {/* Error */}
               {error && (
-                <div className="bg-red-50 border border-red-100 rounded-lg p-3 mb-4 flex items-start">
+                <div className="bg-red-50 dark:bg-red-950 border border-red-100 dark:border-red-800 rounded-lg p-3 mb-4 flex items-start">
                   <AlertCircle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <p className="text-red-700 text-sm">{error}</p>
+                  <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
                 </div>
               )}
 
@@ -153,7 +154,7 @@ export default function Home() {
               <button
                 onClick={handleUpload}
                 disabled={!file || isUploading}
-                className="w-full bg-indigo-600 text-white py-3.5 px-4 rounded-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                className="w-full bg-indigo-600 text-white py-3.5 px-4 rounded-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
               >
                 {isUploading ? (
                   <>
@@ -172,9 +173,9 @@ export default function Home() {
               </button>
 
               {/* Disclaimer */}
-              <p className="text-xs text-gray-400 text-center mt-4">
+              <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-4">
                 This is not legal advice. For further help, contact{" "}
-                <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">
+                <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600 dark:hover:text-gray-300">
                   Citizens Advice
                 </a>
                 .
@@ -183,45 +184,53 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works */}
+        {/* How It Works + Example Output — side by side */}
         <section className="px-4 pb-20">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">How it works</h2>
-            <div className="grid sm:grid-cols-3 gap-8">
-              {[
-                { icon: Upload, title: "Upload", desc: "Take a photo or upload a PDF of your official document." },
-                { icon: FileText, title: "Analyse", desc: "AI reads and explains the document in plain English." },
-                { icon: ArrowRight, title: "Act", desc: "Get key deadlines, actions, and a ready-made response letter." },
-              ].map((step, i) => (
-                <div key={i} className="text-center">
-                  <div className="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
-                    <step.icon className="h-6 w-6 text-indigo-600" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{step.title}</h3>
-                  <p className="text-sm text-gray-500">{step.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Supported Docs */}
-        <section className="px-4 pb-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Supported document types</h2>
-              <div className="grid sm:grid-cols-3 gap-6">
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8">
+            {/* How It Works */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">How it works</h2>
+              <div className="space-y-6">
                 {[
-                  { emoji: "🚇", title: "TfL Fines", desc: "Penalty charge notices and fare evasion letters" },
-                  { emoji: "🏠", title: "Council Letters", desc: "Housing, tax, and benefits correspondence" },
-                  { emoji: "📋", title: "Eviction Notices", desc: "Section 21, Section 8, and court orders" },
-                ].map((doc, i) => (
-                  <div key={i} className="text-center p-4 rounded-xl bg-gray-50">
-                    <div className="text-3xl mb-3">{doc.emoji}</div>
-                    <h3 className="font-semibold text-gray-900 mb-1">{doc.title}</h3>
-                    <p className="text-sm text-gray-500">{doc.desc}</p>
+                  { icon: Upload, title: "Upload", desc: "Take a photo or upload a PDF of your official document." },
+                  { icon: FileText, title: "Analyse", desc: "AI reads and explains the document in plain English." },
+                  { icon: ArrowRight, title: "Act", desc: "Get key deadlines, actions, and a ready-made response letter." },
+                ].map((step, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                      <step.icon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{step.title}</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{step.desc}</p>
+                    </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Example Output */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">See what you get</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
+                <div className="bg-indigo-50 dark:bg-indigo-950 px-4 py-2.5 border-b border-indigo-100 dark:border-indigo-900">
+                  <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">Your Results</span>
+                </div>
+                <div className="p-4 flex items-center justify-center bg-gray-50/50 dark:bg-gray-800/50 min-h-[320px]">
+                  {sampleOutputError ? (
+                    <div className="flex flex-col items-center gap-2 text-gray-300 dark:text-gray-600">
+                      <FileText className="h-9 w-9" />
+                      <p className="text-xs">Add sample-output.jpg to /public</p>
+                    </div>
+                  ) : (
+                    <img
+                      src="/sample-output.jpg"
+                      alt="Example analysis results"
+                      className="max-h-80 rounded-lg shadow-sm object-contain"
+                      onError={() => setSampleOutputError(true)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -230,8 +239,8 @@ export default function Home() {
         {/* About Us */}
         <section id="about" className="px-4 pb-20 scroll-mt-20">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">About Us</h2>
-            <p className="text-gray-500 text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-3">About Us</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">
               DocExplain was built to make official documents accessible to everyone. We believe no one should lose out because a letter was too hard to understand.
             </p>
             <div className="grid sm:grid-cols-3 gap-8">
@@ -241,11 +250,11 @@ export default function Home() {
                 { icon: Clock, title: "Instant results", desc: "Get a full breakdown in seconds — no waiting, no appointments." },
               ].map((item, i) => (
                 <div key={i} className="text-center">
-                  <div className="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
-                    <item.icon className="h-6 w-6 text-indigo-600" />
+                  <div className="mx-auto w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mb-4">
+                    <item.icon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                  <p className="text-sm text-gray-500">{item.desc}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -255,7 +264,7 @@ export default function Home() {
         {/* Help */}
         <section id="help" className="px-4 pb-24 scroll-mt-20">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">Help</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">Help</h2>
             <div className="space-y-4">
               {[
                 {
@@ -279,13 +288,13 @@ export default function Home() {
                   a: "No. DocExplain provides plain-English summaries and suggested actions, but this is not a substitute for professional legal advice. For expert help, contact Citizens Advice.",
                 },
               ].map((item, i) => (
-                <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                    <item.icon className="h-5 w-5 text-indigo-600" />
+                <div key={i} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5 flex gap-4 transition-colors">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900 flex items-center justify-center">
+                    <item.icon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">{item.q}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{item.a}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.q}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.a}</p>
                   </div>
                 </div>
               ))}
@@ -293,10 +302,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Contact */}
         <section id="contact" className="px-4 pb-24 scroll-mt-20">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">Contact Us</h2>
-            <p className="text-gray-500 text-center mb-10">Get in touch with the team behind DocExplain</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-3">Contact Us</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-center mb-10">Get in touch with the team behind DocExplain</p>
             <div className="grid sm:grid-cols-2 gap-6">
               {[
                 {
@@ -314,20 +324,20 @@ export default function Home() {
                   img: "/ajay pfp.jpeg",
                 },
               ].map((person, i) => (
-                <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col items-center text-center">
+                <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 flex flex-col items-center text-center transition-colors">
                   <img
                     src={person.img}
                     alt={person.name}
                     className="w-20 h-20 rounded-full object-cover mb-4"
                   />
-                  <h3 className="text-lg font-semibold text-gray-900">{person.name}</h3>
-                  <p className="text-sm text-gray-400 mb-4">{person.handle}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{person.name}</h3>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 mb-4">{person.handle}</p>
                   <div className="flex items-center gap-3">
                     <a
                       href={person.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-[#0A66C2] bg-gray-50 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-[#0A66C2] bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900 px-3 py-2 rounded-lg transition-colors"
                     >
                       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -338,7 +348,7 @@ export default function Home() {
                       href={person.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors"
                     >
                       <Github className="h-4 w-4" />
                       GitHub
@@ -351,10 +361,10 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-gray-100 bg-white py-8 px-4">
-          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+        <footer className="border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 py-8 px-4 transition-colors">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400 dark:text-gray-500">
             <span>@aarondoesnotcode @ajaysoll</span>
-            <span>This is not legal advice. For further help, contact <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">Citizens Advice</a>.</span>
+            <span>This is not legal advice. For further help, contact <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600 dark:hover:text-gray-300">Citizens Advice</a>.</span>
           </div>
         </footer>
       </main>

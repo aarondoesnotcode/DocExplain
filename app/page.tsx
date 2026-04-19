@@ -10,6 +10,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
   const [sampleOutputError, setSampleOutputError] = useState(false);
+  const [fullscreenImg, setFullscreenImg] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -60,7 +61,7 @@ export default function Home() {
               <span className="text-terra-500 dark:text-terra-300">official documents</span>
             </h1>
             <p className="text-lg text-bark-400 dark:text-sand-400 max-w-lg mx-auto leading-relaxed">
-              Upload a TfL fine, council letter, or eviction notice and get a plain English breakdown with deadlines, actions, and a ready-made response.
+              Upload any UK official document and get a plain English breakdown with deadlines, actions, and a ready-made response.
             </p>
           </div>
         </section>
@@ -148,7 +149,7 @@ export default function Home() {
                       <p className="text-sm">Add sample-output.jpg to /public</p>
                     </div>
                   ) : (
-                    <img src="/sample-output.jpg" alt="Example analysis results" className="max-h-80 rounded-2xl shadow-md object-contain" onError={() => setSampleOutputError(true)} />
+                    <img src="/sample-output.jpg" alt="Example analysis results" className="w-full scale-105 rounded-2xl shadow-md object-contain cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setFullscreenImg(true)} onError={() => setSampleOutputError(true)} />
                   )}
                 </div>
               </div>
@@ -158,18 +159,25 @@ export default function Home() {
 
         {/* Supported Docs */}
         <section className="relative px-5 pb-24">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-serif text-bark-900 dark:text-cream-50 text-center mb-10">Document types we handle</h2>
-            <div className="grid sm:grid-cols-3 gap-5">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-serif text-bark-900 dark:text-cream-50 mb-4">Any UK official document</h2>
+            <p className="text-bark-400 dark:text-sand-400 max-w-xl mx-auto mb-10 leading-relaxed">
+              From parking fines to NHS letters — if it's an official UK document, we can break it down for you.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { emoji: "🚇", title: "TfL Fines", desc: "Penalty charge notices and fare evasion letters" },
-                { emoji: "🏠", title: "Council Letters", desc: "Housing, tax, and benefits correspondence" },
-                { emoji: "📋", title: "Eviction Notices", desc: "Section 21, Section 8, and court orders" },
+                { emoji: "🚇", title: "TfL & Transport" },
+                { emoji: "🏠", title: "Council & Housing" },
+                { emoji: "📋", title: "Eviction & Court" },
+                { emoji: "🏥", title: "NHS & Medical" },
+                { emoji: "💰", title: "Tax & HMRC" },
+                { emoji: "🏛️", title: "Immigration" },
+                { emoji: "⚖️", title: "Legal Notices" },
+                { emoji: "📨", title: "Benefits & DWP" },
               ].map((doc, i) => (
-                <div key={i} className="bg-white/60 dark:bg-bark-800/50 backdrop-blur-lg rounded-2xl border border-white/40 dark:border-bark-700/40 p-6 text-center hover:shadow-md hover:shadow-bark-900/5 dark:hover:shadow-black/10 transition-all hover:-translate-y-0.5">
-                  <div className="text-4xl mb-4">{doc.emoji}</div>
-                  <h3 className="font-semibold text-bark-900 dark:text-cream-100 mb-1.5">{doc.title}</h3>
-                  <p className="text-sm text-bark-400 dark:text-sand-400 leading-relaxed">{doc.desc}</p>
+                <div key={i} className="bg-white/60 dark:bg-bark-800/50 backdrop-blur-lg rounded-2xl border border-white/40 dark:border-bark-700/40 p-4 text-center hover:shadow-md hover:shadow-bark-900/5 dark:hover:shadow-black/10 transition-all hover:-translate-y-0.5">
+                  <div className="text-2xl mb-2">{doc.emoji}</div>
+                  <p className="text-sm font-medium text-bark-700 dark:text-sand-300">{doc.title}</p>
                 </div>
               ))}
             </div>
@@ -187,7 +195,7 @@ export default function Home() {
               {[
                 { icon: Users, title: "Built for people", desc: "Designed for migrants, elderly users, and anyone who struggles with complex language." },
                 { icon: Shield, title: "Private by design", desc: "Your documents are processed in real-time and never stored on our servers." },
-                { icon: Clock, title: "Instant results", desc: "Get a full breakdown in seconds — no waiting, no appointments." },
+                { icon: Clock, title: "Instant results", desc: "Get a full breakdown in 30–60 seconds — no waiting, no appointments." },
               ].map((item, i) => (
                 <div key={i} className="text-center">
                   <div className="mx-auto w-14 h-14 rounded-2xl bg-sage-100/60 dark:bg-sage-900/30 flex items-center justify-center mb-5">
@@ -209,7 +217,7 @@ export default function Home() {
               {[
                 { icon: Upload, q: "What file types can I upload?", a: "You can upload JPG or PNG images (e.g. a photo of a letter) or a PDF file. The maximum file size is 10 MB." },
                 { icon: Shield, q: "Is my document stored anywhere?", a: "No. Your document is processed in real-time and is never saved to our servers. It exists only for the duration of the analysis." },
-                { icon: BookOpen, q: "What documents are supported?", a: "Currently we support TfL fines, council letters, and eviction notices. More document types will be added soon." },
+                { icon: BookOpen, q: "What documents are supported?", a: "Any UK official document — TfL fines, council letters, eviction notices, NHS letters, HMRC notices, immigration documents, court orders, DWP letters, and more." },
                 { icon: MessageCircle, q: "Is this legal advice?", a: "No. DocExplain provides plain-English summaries and suggested actions, but this is not a substitute for professional legal advice. For expert help, contact Citizens Advice." },
               ].map((item, i) => (
                 <div key={i} className="bg-white/60 dark:bg-bark-800/50 backdrop-blur-lg rounded-2xl border border-white/40 dark:border-bark-700/40 p-6 flex gap-5 transition-colors hover:bg-white/80 dark:hover:bg-bark-800/60">
@@ -267,6 +275,13 @@ export default function Home() {
             <span>This is not legal advice. For further help, contact <a href="https://www.citizensadvice.org.uk/" target="_blank" rel="noopener noreferrer" className="underline hover:text-terra-500 dark:hover:text-terra-400 transition-colors">Citizens Advice</a>.</span>
           </div>
         </footer>
+        {/* Fullscreen image overlay */}
+        {fullscreenImg && (
+          <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 cursor-pointer" onClick={() => setFullscreenImg(false)}>
+            <img src="/sample-output.jpg" alt="Example analysis results" className="max-w-full max-h-full rounded-2xl shadow-2xl object-contain" onClick={(e) => e.stopPropagation()} />
+            <button onClick={() => setFullscreenImg(false)} className="absolute top-5 right-5 text-white/70 hover:text-white text-sm font-medium bg-white/10 hover:bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full transition-all">Close</button>
+          </div>
+        )}
       </main>
     </>
   );

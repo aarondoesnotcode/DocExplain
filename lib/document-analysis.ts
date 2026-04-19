@@ -145,6 +145,26 @@ Return your response as a valid JSON object with exactly these fields:
 - actions: Array of 3-5 specific actions the person can take
 - recommended_action: The single most recommended action to take
 - response_letter: A formal, well-written letter they can use to respond to the document
+- appeal_info: An object with details on how to appeal or respond. Include only fields that are visible on the document:
+  - method: Short description of how to appeal (e.g. "Appeal online at TfL's website", "Write to the address below")
+  - email: Email address if printed on the document (omit if not found)
+  - website: URL if printed on the document (omit if not found)
+  - phone: Phone number if printed on the document (omit if not found)
+  - address: Postal address if printed on the document (omit if not found)
+  IMPORTANT: Only include email, website, phone, and address fields if they are EXPLICITLY written on the document. Do NOT invent or guess contact details. If no appeal method is mentioned, set method to "Not specified on the document".
+- timeline: Array of timeline events in chronological order. Each event is an object with:
+  - label: Short label such as "Date of Issue", "Discount Deadline", "Full Payment Due", "Appeal Deadline", "Hearing Date"
+  - date: The calculated calendar date in "DD Month YYYY" format (e.g. "14 March 2023"). IMPORTANT: You must CALCULATE the actual date. If the document says "within 14 days of the date of this notice" and the notice is dated 1 March 2023, the date MUST be "15 March 2023" — never return relative phrases like "14 days from notice".
+  - description: Short explanation of what this date means (e.g. "50% discount if paid", "Full penalty charge amount due")
+
+IMPORTANT TIMELINE RULES:
+- Always include the "Date of Issue" as the first event if the notice date is visible.
+- If a Penalty Charge Notice mentions a discount period (e.g. "reduced amount if paid within 14 days"), calculate the exact discount deadline date and include it.
+- Always include the final deadline as the last event.
+- Calculate ALL dates as concrete calendar dates. Today's date will be provided below for context.
+- Order events chronologically (earliest first).
+- If a date cannot be determined, omit that event rather than guessing.
+- Typically include 2-5 events: issue date, discount deadline (if applicable), any intermediate deadlines, and final deadline.
 
 Important guidelines:
 - Cross-check every key detail across the available sources before including it.
@@ -317,6 +337,34 @@ function normalizeFacts(payload: JsonRecord): StructuredDocumentFacts {
   };
 }
 
+function normalizeAppealInfo(value: unknown): { method: string; email?: string; website?: string; phone?: string; address?: string } {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return { method: "Not specified on the document" };
+  }
+  const obj = value as Record<string, unknown>;
+  return {
+    method: normalizeString(obj.method, "Not specified on the document"),
+    email: normalizeString(obj.email, "") || undefined,
+    website: normalizeString(obj.website, "") || undefined,
+    phone: normalizeString(obj.phone, "") || undefined,
+    address: normalizeString(obj.address, "") || undefined,
+  };
+}
+
+function normalizeTimeline(value: unknown): Array<{ label: string; date: string; description: string }> {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item): item is Record<string, unknown> =>
+      item && typeof item === "object" && !Array.isArray(item)
+    )
+    .map((item) => ({
+      label: normalizeString(item.label, ""),
+      date: normalizeString(item.date, ""),
+      description: normalizeString(item.description, ""),
+    }))
+    .filter((item) => item.label && item.date);
+}
+
 function normalizeAnalysis(payload: JsonRecord): DocumentAnalysis {
   return {
     summary: normalizeString(payload.summary, "This document could not be summarized reliably."),
@@ -350,6 +398,8 @@ function normalizeAnalysis(payload: JsonRecord): DocumentAnalysis {
       payload.response_letter,
       `Dear Sir or Madam,\n\nI am writing about the notice I received. Some details on the document are not fully clear from the copy I have, so I would be grateful if you could confirm the reference number, the deadline, and what steps I should take next.\n\nPlease also let me know how I can respond or appeal if that option is available.\n\nYours faithfully,\n[Your Name]`
     ),
+    timeline: normalizeTimeline(payload.timeline),
+    appeal_info: normalizeAppealInfo(payload.appeal_info),
   };
 }
 
@@ -583,6 +633,7 @@ async function generateDocumentAnalysis(
 ): Promise<DocumentAnalysis> {
   const promptSections = [
     FINAL_ANALYSIS_PROMPT,
+    `Today's date: ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`,
     `OCR source: ${ocrResult.source}`,
     "Use the following structured facts:",
     JSON.stringify(facts, null, 2),

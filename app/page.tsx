@@ -162,7 +162,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-serif text-bark-900 dark:text-cream-50 mb-4">Any UK official document</h2>
             <p className="text-bark-400 dark:text-sand-400 max-w-xl mx-auto mb-10 leading-relaxed">
-              From parking fines to NHS letters — if it's an official UK document, we can break it down for you.
+              From parking fines to NHS letters — if it&apos;s an official UK document, we can break it down for you.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[

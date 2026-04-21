@@ -5,7 +5,8 @@ Global Hacktour Project @ UCL | @aarondoesnotcode @ajaysoll
 DocExplain helps people in the UK understand official documents by providing plain English explanations, key points, deadlines, and actionable responses. Works with any UK official document — TfL fines, council letters, eviction notices, NHS letters, HMRC notices, and more.
 
 ## Our hackathon entry
-https://www.youtube.com/watch?v=uh4UofHxJio - Demo Video
+https://www.youtube.com/watch?v=uh4UofHxJio - Demo
+Also attached our presentation PPT
 
 ## Features
 - **Document Upload**: Upload images (JPG, PNG) or PDF files
@@ -64,13 +65,6 @@ GOOGLE_CLOUD_API_KEY=your_google_cloud_api_key_here
 **Z.ai API:**
 1. Create or copy your Z.ai API key
 2. Add it to `.env.local` as `ZAI_API_KEY`
-
-**Google Vision API (optional):**
-1. Go to Google Cloud Console
-2. Create a project or select an existing one
-3. Enable Vision API
-4. Create API credentials
-5. Add the API key to your `.env.local`
 
 ### Running the Application
 
@@ -182,16 +176,6 @@ docexplain/
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
-
-### Code Style
-- TypeScript throughout
-- Mobile-first responsive design
-- Warm earthy colour palette (terra, sage, bark, sand, cream)
-- Serif headings (DM Serif Display), sans-serif body (Inter)
-
-## Contributing
-
-This is a hackathon project. Feel free to fork and improve!
 
 ## License
 

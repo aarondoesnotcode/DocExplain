@@ -4,6 +4,12 @@ Global Hacktour Project @ UCL | @aarondoesnotcode @ajaysoll
 ## Overview
 DocExplain helps people in the UK understand official documents by providing plain English explanations, key points, deadlines, and actionable responses. Works with any UK official document — TfL fines, council letters, eviction notices, NHS letters, HMRC notices, and more.
 
+<img width="1340" height="829" alt="image" src="https://github.com/user-attachments/assets/21461b65-540f-49cb-8cb3-463b86786300" />
+<img width="1340" height="829" alt="image" src="https://github.com/user-attachments/assets/4b662256-9591-4036-9cce-2661ac1554d0" />
+
+
+
+
 ## Our hackathon entry
 https://www.youtube.com/watch?v=uh4UofHxJio - Demo
 
@@ -11,7 +17,7 @@ Also attached our presentation PPT
 
 ## Features
 - **Document Upload**: Upload images (JPG, PNG) or PDF files
-- **OCR Processing**: Multi-tier text extraction (Z.ai layout parsing, Google Vision, Tesseract fallback)
+- **OCR Processing**: Multi-tier text extraction (Z.ai layout parsing, Tesseract fallback)
 - **AI Analysis**: Structured analysis using Z.ai GLM models
 - **Actionable Results**: Plain English summaries, key points, urgency, deadlines, timeline, and appeal info
 - **Response Letter**: Generate editable professional response letters
@@ -25,62 +31,9 @@ Also attached our presentation PPT
 - **OCR**: Z.ai layout parsing (primary), Google Vision API (optional), Tesseract.js (fallback)
 - **AI**: Z.ai API (`glm-5-turbo` for text, `glm-5v-turbo` for vision)
 
-## Setup Instructions
-
 ### Prerequisites
 - Node.js 18+ and npm
 - Z.ai API key
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd docexplain
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Set up environment variables:
-```bash
-cp .env.local.example .env.local
-```
-
-Edit `.env.local` and add your API keys:
-```
-ZAI_API_KEY=your_zai_api_key_here
-ZAI_MODEL=glm-5-turbo
-ZAI_VISION_MODEL=glm-5v-turbo
-```
-
-Optional — add Google Vision API for stronger image OCR:
-```
-GOOGLE_CLOUD_API_KEY=your_google_cloud_api_key_here
-```
-
-### Getting API Keys
-
-**Z.ai API:**
-1. Create or copy your Z.ai API key
-2. Add it to `.env.local` as `ZAI_API_KEY`
-
-### Running the Application
-
-Development mode:
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-Production build:
-```bash
-npm run build
-npm start
-```
 
 ## Usage
 
@@ -161,22 +114,6 @@ docexplain/
 - **Legal Disclaimer**: App includes a disclaimer that this is not legal advice — users are directed to Citizens Advice
 - **Processing Time**: Typically 30–60 seconds depending on document complexity
 - **Best Results**: Use a clear, well-lit photo or high-quality PDF for accurate text extraction
-
-## Troubleshooting
-
-**"Failed to extract text"**: Ensure the document image is clear and well-lit. High-quality images and PDFs work best.
-
-**"Failed to analyze document"**: Check your `ZAI_API_KEY` is correctly set in `.env.local`.
-
-**Slow processing**: Complex documents or large files take longer. If Google Vision API is not configured, Tesseract.js (local fallback) is slower.
-
-## Development
-
-### Available Scripts
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
 
 ## License
 
